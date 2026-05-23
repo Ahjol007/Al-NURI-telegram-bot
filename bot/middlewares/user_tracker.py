@@ -6,7 +6,7 @@ from aiogram.types import TelegramObject, Message, CallbackQuery
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.models import User
+from models import User
 
 
 class UserTrackerMiddleware(BaseMiddleware):

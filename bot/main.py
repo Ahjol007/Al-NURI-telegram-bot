@@ -8,10 +8,10 @@ from aiogram.webhook.aiohttp_server import SimpleRequestHandler, setup_applicati
 from aiohttp import web
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.config import settings
-from bot.database import AsyncSessionLocal, init_db
-from bot.middlewares.user_tracker import UserTrackerMiddleware
-from bot.handlers import start, menu, products, prices, consultation, reviews, contact, ai_chat
+from config import settings
+from database import AsyncSessionLocal, init_db
+from middlewares.user_tracker import UserTrackerMiddleware
+from handlers import start, menu, products, prices, consultation, reviews, contact, ai_chat
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)

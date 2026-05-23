@@ -4,8 +4,8 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.models import Consultation, User
-from bot.keyboards.main_menu import get_main_menu
+from models import Consultation, User
+from keyboards.main_menu import get_main_menu
 
 router = Router()
 

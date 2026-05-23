@@ -8,8 +8,8 @@ from aiogram.types import Message
 from sqlalchemy import select, desc
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.config import settings
-from bot.models import MessageLog, User
+from config import settings
+from models import MessageLog, User
 
 router = Router()
 logger = logging.getLogger(__name__)
