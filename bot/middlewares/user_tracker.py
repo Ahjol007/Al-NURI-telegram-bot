@@ -1,5 +1,5 @@
 from typing import Any, Awaitable, Callable, Dict
-from datetime import datetime, timezone
+from datetime import datetime
 
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject, Message, CallbackQuery
@@ -37,7 +37,7 @@ class UserTrackerMiddleware(BaseMiddleware):
                 )
                 session.add(user)
             else:
-                user.last_active = datetime.now(timezone.utc)
+                user.last_active = datetime.utcnow()
                 user.username = tg_user.username
                 user.language_code = lang
 
