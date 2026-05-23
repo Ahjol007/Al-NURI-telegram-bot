@@ -1,6 +1,8 @@
-from datetime import datetime
+from datetime import datetime, timezone
+
 from sqlalchemy import BigInteger, String, Text, Integer, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
 from bot.database import Base
 
 
@@ -12,8 +14,8 @@ class User(Base):
     username: Mapped[str | None] = mapped_column(String(255))
     first_name: Mapped[str | None] = mapped_column(String(255))
     language_code: Mapped[str] = mapped_column(String(10), default="ru")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
-    last_active: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    last_active: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
 
 class Consultation(Base):
@@ -27,7 +29,7 @@ class Consultation(Base):
     duration: Mapped[str | None] = mapped_column(String(255))
     previous_treatment: Mapped[str | None] = mapped_column(String(255))
     status: Mapped[str] = mapped_column(String(20), default="new")
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class MessageLog(Base):
@@ -37,7 +39,7 @@ class MessageLog(Base):
     user_id: Mapped[int] = mapped_column(BigInteger, ForeignKey("users.id"), nullable=False)
     message_text: Mapped[str | None] = mapped_column(Text)
     direction: Mapped[str] = mapped_column(String(3))
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class Broadcast(Base):
@@ -47,4 +49,4 @@ class Broadcast(Base):
     admin_id: Mapped[int] = mapped_column(BigInteger, nullable=False)
     message_text: Mapped[str] = mapped_column(Text, nullable=False)
     sent_count: Mapped[int] = mapped_column(Integer, default=0)
-    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
