@@ -37,11 +37,13 @@ class UserTrackerMiddleware(BaseMiddleware):
                 session.add(user)
             else:
                 user.last_active = datetime.now(timezone.utc)
-                if tg_user.username != user.username:
-                    user.username = tg_user.username
+                user.username = tg_user.username
+                user.language_code = lang
+
+            # Assign data keys BEFORE commit to avoid MissingGreenlet on attribute access
+            data["db_user"] = user
+            data["lang"] = lang
 
             await session.commit()
-            data["db_user"] = user
-            data["lang"] = user.language_code
 
         return await handler(event, data)
