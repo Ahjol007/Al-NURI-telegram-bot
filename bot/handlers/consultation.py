@@ -5,6 +5,7 @@ from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.models import Consultation, User
+from bot.keyboards.main_menu import get_main_menu
 
 router = Router()
 
@@ -122,7 +123,5 @@ async def process_previous(message: Message, state: FSMContext, session: AsyncSe
     )
     session.add(consultation)
     await session.commit()
-    await state.clear()
-
-    from bot.keyboards.main_menu import get_main_menu
     await message.answer(TEXTS[lang]["done"], reply_markup=get_main_menu(lang))
+    await state.clear()
