@@ -1,4 +1,9 @@
+import asyncio
+
 import google.generativeai as genai
+from fastapi import HTTPException
+
+from ai_service.prompts import get_system_prompt
 
 
 async def get_ai_reply(
@@ -7,8 +12,6 @@ async def get_ai_reply(
     lang: str,
     api_key: str,
 ) -> str:
-    from ai_service.prompts import get_system_prompt
-
     genai.configure(api_key=api_key)
     model = genai.GenerativeModel(
         model_name="gemini-1.5-flash",
@@ -21,5 +24,12 @@ async def get_ai_reply(
         chat_history.append({"role": role, "parts": [msg.get("text", "")]})
 
     chat = model.start_chat(history=chat_history)
-    response = chat.send_message(message)
+    try:
+        response = await asyncio.to_thread(
+            chat.send_message,
+            message,
+            request_options={"timeout": 30},
+        )
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Gemini API error: {e}")
     return response.text
