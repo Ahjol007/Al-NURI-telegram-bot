@@ -7,13 +7,13 @@ from fastapi import FastAPI, Request
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker
 
-from admin_service.db_queries import (
+from db_queries import (
     get_stats,
     get_recent_users,
     get_new_consultations,
     get_all_user_telegram_ids,
 )
-from admin_service.broadcaster import broadcast_message
+from broadcaster import broadcast_message
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
