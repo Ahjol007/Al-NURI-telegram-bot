@@ -2,7 +2,7 @@ from typing import Any, Awaitable, Callable, Dict
 from datetime import datetime, timezone
 
 from aiogram import BaseMiddleware
-from aiogram.types import TelegramObject, Message
+from aiogram.types import TelegramObject, Message, CallbackQuery
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -16,9 +16,10 @@ class UserTrackerMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: Dict[str, Any],
     ) -> Any:
-        if isinstance(event, Message) and event.from_user:
+        tg_user = getattr(event, "from_user", None)
+
+        if tg_user is not None and isinstance(event, (Message, CallbackQuery)):
             session: AsyncSession = data["session"]
-            tg_user = event.from_user
 
             lang = "kk" if tg_user.language_code == "kk" else "ru"
 
