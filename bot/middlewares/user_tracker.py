@@ -21,7 +21,7 @@ class UserTrackerMiddleware(BaseMiddleware):
         if tg_user is not None and isinstance(event, (Message, CallbackQuery)):
             session: AsyncSession = data["session"]
 
-            lang = "kk" if tg_user.language_code == "kk" else "ru"
+            lang = "ru" if tg_user.language_code == "ru" else "kk"
 
             result = await session.execute(
                 select(User).where(User.telegram_id == tg_user.id)
