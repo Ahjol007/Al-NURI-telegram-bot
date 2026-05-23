@@ -1,7 +1,7 @@
 import logging
 
 import httpx
-from aiogram import Router
+from aiogram import Router, F
 from aiogram.filters import StateFilter
 from aiogram.fsm.state import default_state
 from aiogram.types import Message
@@ -26,8 +26,11 @@ async def _get_message_history(session: AsyncSession, user_id: int) -> list[dict
     return [{"direction": m.direction, "text": m.message_text} for m in reversed(logs)]
 
 
-@router.message(StateFilter(default_state))
+@router.message(StateFilter(default_state), F.text)
 async def handle_ai_chat(message: Message, session: AsyncSession, db_user: User, lang: str):
+    # Fetch history BEFORE adding the current message to avoid duplicating it in context
+    history = await _get_message_history(session, db_user.id)
+
     in_log = MessageLog(
         user_id=db_user.id,
         message_text=message.text,
@@ -35,8 +38,6 @@ async def handle_ai_chat(message: Message, session: AsyncSession, db_user: User,
     )
     session.add(in_log)
     await session.flush()
-
-    history = await _get_message_history(session, db_user.id)
 
     try:
         async with httpx.AsyncClient(timeout=35.0) as client:
