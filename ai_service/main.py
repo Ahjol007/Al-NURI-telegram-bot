@@ -27,7 +27,7 @@ class ChatResponse(BaseModel):
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(request: ChatRequest):
-    from ai_service.gemini_client import get_ai_reply
+    from gemini_client import get_ai_reply
     reply = await get_ai_reply(
         message=request.message,
         history=request.history,

@@ -3,7 +3,7 @@ import asyncio
 import google.generativeai as genai
 from fastapi import HTTPException
 
-from ai_service.prompts import get_system_prompt
+from prompts import get_system_prompt
 
 
 async def get_ai_reply(
