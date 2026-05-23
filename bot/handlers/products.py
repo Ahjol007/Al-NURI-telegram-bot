@@ -128,6 +128,9 @@ async def show_products_menu(message: Message, lang: str):
 
 @router.callback_query(F.data.startswith("product_"))
 async def show_product_info(callback: CallbackQuery, lang: str):
+    if not callback.message:
+        await callback.answer("Ошибка: сообщение недоступно.")
+        return
     info = PRODUCT_INFO.get(callback.data, {})
     text = info.get(lang, info.get("ru", "Ақпарат табылмады."))
     await callback.message.answer(text, parse_mode="Markdown")

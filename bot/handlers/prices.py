@@ -1,5 +1,5 @@
 from aiogram import Router, F
-from aiogram.types import Message
+from aiogram.types import Message, LinkPreviewOptions
 
 router = Router()
 
@@ -61,4 +61,4 @@ PRICE_BUTTONS = {"💰 Өнім бағалары", "💰 Цены на прод�
 @router.message(F.text.in_(PRICE_BUTTONS))
 async def show_prices(message: Message, lang: str):
     text = PRICES_KK if lang == "kk" else PRICES_RU
-    await message.answer(text, parse_mode="Markdown", disable_web_page_preview=True)
+    await message.answer(text, parse_mode="Markdown", link_preview_options=LinkPreviewOptions(is_disabled=True))
