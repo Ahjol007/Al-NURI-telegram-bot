@@ -4,7 +4,7 @@ from aiogram.types import Message
 router = Router()
 
 REVIEWS_KK = (
-    "⭐ *Пікірлер және Кейстер*\n\n"
+    "⭐ <b>Пікірлер және Кейстер</b>\n\n"
     "👶 Бала мәселесі жайлы:\n"
     "https://www.instagram.com/reel/DRMHyWGDI44/\n\n"
     "💊 Өнім туралы:\n"
@@ -14,7 +14,7 @@ REVIEWS_KK = (
 )
 
 REVIEWS_RU = (
-    "⭐ *Отзывы и Кейсы*\n\n"
+    "⭐ <b>Отзывы и Кейсы</b>\n\n"
     "👶 О детском вопросе:\n"
     "https://www.instagram.com/reel/DRMHyWGDI44/\n\n"
     "💊 О продукте:\n"
@@ -29,4 +29,4 @@ REVIEWS_BUTTONS = {"⭐ Пікір және Кейстер", "⭐ Отзывы �
 @router.message(F.text.in_(REVIEWS_BUTTONS))
 async def show_reviews(message: Message, lang: str):
     text = REVIEWS_KK if lang == "kk" else REVIEWS_RU
-    await message.answer(text, parse_mode="Markdown")
+    await message.answer(text, parse_mode="HTML")
