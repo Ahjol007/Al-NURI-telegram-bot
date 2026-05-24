@@ -126,4 +126,4 @@ async def admin_webhook(request: Request):
 
 @app.get("/health")
 async def health():
-    return {"status": "ok"}
+    return {"status": "ok", "service": "admin"}
