@@ -11,7 +11,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from config import settings
 from database import AsyncSessionLocal, init_db
 from middlewares.user_tracker import UserTrackerMiddleware
-from handlers import start, menu, products, prices, consultation, reviews, contact, ai_chat
+from handlers import start, menu, products, prices, consultation, reviews, contact, ai_chat, admin
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 logger = logging.getLogger(__name__)
@@ -47,6 +47,7 @@ def create_app() -> web.Application:
     dp.callback_query.middleware(UserTrackerMiddleware())
 
     # Register routers — ai_chat MUST be last (catch-all)
+    dp.include_router(admin.router)
     dp.include_router(start.router)
     dp.include_router(menu.router)
     dp.include_router(products.router)
