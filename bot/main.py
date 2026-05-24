@@ -27,8 +27,7 @@ async def on_startup(bot: Bot) -> None:
 
 
 async def on_shutdown(bot: Bot) -> None:
-    await bot.delete_webhook()
-    logger.info("Webhook deleted")
+    logger.info("Bot shutting down")
 
 
 def create_app() -> web.Application:
