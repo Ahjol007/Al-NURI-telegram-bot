@@ -54,11 +54,7 @@ async def handle_ai_chat(message: Message, session: AsyncSession, db_user: User,
             reply_text = resp.json().get("reply", "...")
     except Exception as e:
         logger.error(f"AI service error: {e}")
-        reply_text = (
-            "Кешіріңіз, қазір жауап бере алмаймын. WhatsApp-қа жазыңыз: https://wa.me/77778151988"
-            if lang == "kk"
-            else "Извините, сейчас не могу ответить. Пишите в WhatsApp: https://wa.me/77778151988"
-        )
+        reply_text = "Кешіріңіз, қазір жауап бере алмаймын. WhatsApp-қа жазыңыз: https://wa.me/77778151988"
 
     out_log = MessageLog(
         user_id=db_user.id,
