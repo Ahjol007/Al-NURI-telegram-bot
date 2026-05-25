@@ -8,6 +8,24 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from models import User
 
+# Қазақ тіліне тән әріптер (орыс тілінде жоқ)
+_KK_CHARS = set("әіңғүұқөһӘІҢҒҮҰҚӨҺ")
+
+# Орыс тіліне тән, қазақ тілінде жоқ немесе сирек кездесетін әріптер
+_RU_CHARS = set("ёыъэЁЫЪЭ")
+
+
+def detect_lang(text: str, fallback: str = "ru") -> str:
+    """Мәтін бойынша тілді анықтайды: 'kk' немесе 'ru'."""
+    if not text:
+        return fallback
+    for ch in text:
+        if ch in _KK_CHARS:
+            return "kk"
+        if ch in _RU_CHARS:
+            return "ru"
+    return fallback
+
 
 class UserTrackerMiddleware(BaseMiddleware):
     async def __call__(
@@ -21,7 +39,10 @@ class UserTrackerMiddleware(BaseMiddleware):
         if tg_user is not None and isinstance(event, (Message, CallbackQuery)):
             session: AsyncSession = data["session"]
 
-            lang = "ru" if tg_user.language_code in ("ru", "uk", "be") else "kk"
+            # Тіл анықтау: хабарлама мәтіні бойынша, жоқ болса аккаунт тіліне қарайды
+            tg_lang_fallback = "ru" if tg_user.language_code in ("ru", "uk", "be") else "kk"
+            message_text = event.text if isinstance(event, Message) else None
+            lang = detect_lang(message_text, fallback=tg_lang_fallback) if message_text else tg_lang_fallback
 
             result = await session.execute(
                 select(User).where(User.telegram_id == tg_user.id)
